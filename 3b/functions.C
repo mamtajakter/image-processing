@@ -39,23 +39,25 @@ void ReadImage(char *filename, Image &img)
 //   fclose(f_in);
 
 
-  char magicNum[128];
+   char magicNum[128];
    int width, height, maxval;
-	 FILE *in;
-	 in = fopen (filename, "rb");
-   fscanf(in, "%s\n%d %d\n%d\n", magicNum, &width, &height, &maxval);
-   fprintf(stderr, "Read Image size: %d x %d\n", img.w, img.h);
-	 for (int r = 0; r < height; r++) {
-		 for (int c = 0; c < width; c++) {
-			 unsigned char red, green, blue;
-			 fscanf(in, "%c%c%c", &red, &green, &blue);
-		 	 img.buffer[r*width+c].r = red;
-			 img.buffer[r*width+c].g = green;
-			 img.buffer[r*width+c].b = blue;
+	 FILE *f_in= fopen (filename, "rb");
+   fscanf(f_in, "%s\n%d %d\n%d\n", magicNum, &width, &height, &maxval);
+
+   unsigned char rr, gg, bb;
+
+	 for (int i = 0; i < height; i++)
+		 for (int j = 0; j < width; j++) {
+
+			 fscanf(f_in, "%c%c%c", &rr, &gg, &bb);
+
+		 	 img.buffer[i * width + j].r = rr;
+			 img.buffer[i * width + j].g = gg;
+			 img.buffer[i * width + j].b = bb;
 		 }
-	 }
-	 fclose(in);
-   return ;
+
+
+	 fclose(f_in);
 }
 
 
@@ -69,21 +71,21 @@ void WriteImage(char *filename, Image &img )
   //
   // fwrite(img->buffer, sizeof(Pixel),  img->w * img->h, f_out);// write the entre image
   // fclose(f_out);
+
+	FILE *f_out = fopen (filename, "wb");
   
-  fprintf(stderr, "%s\n", "successfully opened file!");
-	FILE *out = fopen (filename, "wb");
-	fprintf(out, "%s\n%d %d\n%d\n", "P6", img.w, img.h, img.mv);
-  fprintf(stderr, "Write Image size: %d x %d\n", img.w, img.h);
-	for (int r = 0; r < img.h; r++) {
-		for (int c = 0; c < img.w; c++) {
-			int pix_id = r*(img.w)+c;
-			fprintf(out, "%c%c%c", img.buffer[pix_id].r
-                 , img.buffer[pix_id].g
-                 , img.buffer[pix_id].b);
-		}
-	}
-	fclose(out);
-  return;
+  fprintf (f_out, "P6\n");// first line "P6"
+  fprintf (f_out, "%d %d\n", img.w, img.h);// second line "1786 1344"
+  fprintf (f_out, "%d\n", img.mv);// third line "255"
+
+	for (int i = 0; i < img.h; i++)
+		for (int j = 0; j < img.w; j++)
+			fprintf(f_out, "%c%c%c", img.buffer[i*(img.w)+j].r, img.buffer[i*(img.w)+j].g, img.buffer[i*(img.w)+j].b);
+
+
+
+
+	fclose(f_out);
 }
 
 Image *
