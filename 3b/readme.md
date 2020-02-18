@@ -3,7 +3,7 @@
 ## input image: 3B_in.png
 ## output image: 3B_out.png
 
-##to run: 
+## to run: 
 
-####make
-####./proj3B 3B_input.pnm 3B_output.pnm
+#### make
+#### ./proj3B 3B_input.pnm 3B_output.pnm
