@@ -1,5 +1,6 @@
-g++ main3E.C image.C sink.C source.C PNMreader.C PNMwriter.C filter.C
-./a.out 3B_input.pnm 3B_output.pnm
+# To run:
+#### g++ main3E.C image.C sink.C source.C PNMreader.C PNMwriter.C filter.C
+#### ./a.out 3B_input.pnm 3B_output.pnm
 
 
 To upload all directories from local computer to the server:
