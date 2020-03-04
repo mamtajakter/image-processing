@@ -1,14 +1,13 @@
 #include "image.h"
-// #include "source.h"
-
+#include "source.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 
  Image::Image(){
-   this->w=0;
-   this->h=0;
-   this->mv=0;
+   this->w=1786;
+   this->h=1344;
+   this->mv=255;
 
    this->buffer = (Pixel *) malloc(sizeof(Pixel)*this->w*this->h);
 
@@ -101,19 +100,17 @@ void Image::ResetSize(int w, int h)
     this->buffer = pixel;
 }
 
-void Image::Update()
-{
-    if (this->s)
-       this->s->Update();
-}
+Source*  Image::getSource(){
+    return this-> s ;
+};
+
+void  Image::setSource(Source* source){
+    s = source;
+};
 
 
-void Image::setSource(Source *sc)
-{
-    this->s = sc;
-}
-
-Source* Image::getSource()
-{
-    return this->s;
-}
+void  Image::Update(void){
+  // if (s != NULL){ 
+    s ->Update();
+  // }
+};

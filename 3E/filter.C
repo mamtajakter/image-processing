@@ -1,50 +1,81 @@
 #include<stdio.h>
-#include "filter.h"
 #include<stdlib.h>
 
-Filter::Filter(){
-  ;
+#include "filter.h"
+// #include "image.h"
+
+Filter::Filter()
+{
+   ;
 }
 
-Filter::~Filter(){
-  ;
+Filter::~Filter()
+{
+   ;
+}
+
+void Filter::Update()
+{
+   if (inputA != NULL){
+
+      inputA->Update();
+      Execute();
+
+      }
+
+  if (inputB != NULL){
+
+      inputB->Update();
+      Execute();
+
+      }
+
+ 
 }
 
 
-Shrinker::Shrinker(){
+// Shrinker::Shrinker(){
+  
+//       GetOutput()->setSource(this);
+// };
 
-	   GetOutput()->setSource(this);
-};
+// Shrinker::~Shrinker()
+// {
+//    ;
+// }
 
-Shrinker::~Shrinker(){
 
-	   ;
-};
+// void  Shrinker::Update(){
 
-void	Shrinker::Update(){
-	if (getInput() != NULL){
-	getInput()->Update();
-	}
-	this->Execute();
+//   if (GetInput() != NULL){
 
-};
+//       GetInput()->Update();
+
+//       }
+
+//  this->Execute();
+
+  
+// };
+
+
 
 void Shrinker::Execute()
 {
 
-  int outputH= imageA->getHeight()/2;
-  int outputW= imageA->getWidth()/2;
+  int outputH= inputA->getHeight()/2;
+  int outputW= inputA->getWidth()/2;
   int inputIndex, outputIndex;
 
-  image.ResetSize(outputW, outputH);
+  output.ResetSize(outputW, outputH);
 
-  Pixel *inputBuffer = imageA->getBuffer();
-  Pixel *outputBuffer = image.getBuffer();
+  Pixel *inputBuffer = inputA->getBuffer();
+  Pixel *outputBuffer = output.getBuffer();
 
   for (int i = 0; i < outputH; i++)
     for (int j = 0; j < outputW; j++){
 
-        inputIndex = i*2 * (imageA->getWidth()) + j*2;
+        inputIndex = i*2 * (inputA->getWidth()) + j*2;
         outputIndex = i * outputW + j;
 
         outputBuffer[outputIndex] = inputBuffer[inputIndex];
@@ -53,42 +84,56 @@ void Shrinker::Execute()
 }
 
 
-LRCombine::LRCombine(){
-	GetOutput()->setSource(this);
-};
+// LRCombine::LRCombine(){
 
-LRCombine::~LRCombine(){
-	;
-};
+//   GetOutput()->setSource(this);
 
-void 	LRCombine::Update(){
-	if (getInput() != NULL){
-	getInput()->Update();
-	}
-	if (getInput2() != NULL){
-	getInput2()->Update();
-	}
-	this->Execute();
-};
+// };
+
+// LRCombine::~LRCombine(){
+
+//   ;
+
+// };
+
+// void  LRCombine::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+
+// };
+
+
 void LRCombine::Execute()
 {
 
     int i, j;
 
-    int outputH= imageA->getHeight();
-    int outputW= imageA->getWidth()+ imageB->getWidth();
+    int outputH= inputA->getHeight();
+    int outputW= inputA->getWidth()+ inputB->getWidth();
     int inputIndex, outputIndex;
 
-    image.ResetSize(outputW, outputH);
+    output.ResetSize(outputW, outputH);
 
-    Pixel *inputABuffer = imageA->getBuffer();
-    Pixel *inputBBuffer = imageB->getBuffer();
-    Pixel *outputBuffer = image.getBuffer();
+    Pixel *inputABuffer = inputA->getBuffer();
+    Pixel *inputBBuffer = inputB->getBuffer();
+    Pixel *outputBuffer = output.getBuffer();
 
     for ( i = 0; i < outputH; i++){
-      for ( j = 0; j < imageA->getWidth(); j++){
+      for ( j = 0; j < inputA->getWidth(); j++){
 
-          inputIndex = i * imageA->getWidth() + j;
+          inputIndex = i * inputA->getWidth() + j;
           outputIndex = i * outputW + j;
 
           outputBuffer[outputIndex] = inputABuffer[inputIndex];
@@ -97,8 +142,8 @@ void LRCombine::Execute()
     }
 
     for ( i = 0; i < outputH; i++){
-      for ( j = imageA->getWidth(); j < outputW; j++){
-          inputIndex = i * imageB->getWidth()+ (j-imageA->getWidth());
+      for ( j = inputA->getWidth(); j < outputW; j++){
+          inputIndex = i * inputB->getWidth()+ (j-inputA->getWidth());
           outputIndex = i * outputW + j;
           outputBuffer[outputIndex] = inputBBuffer[inputIndex];
       }
@@ -107,45 +152,55 @@ void LRCombine::Execute()
 
 }
 
+// TBCombine::TBCombine(){
 
-TBCombine::TBCombine(){
-      	GetOutput()->setSource(this);
+//   GetOutput()->setSource(this);
 
-}
-TBCombine::TBCombine(){
-      	;
+// };
 
-}
+// TBCombine::~TBCombine(){
 
-void 	TBCombine::Update(){
-	if (getInput() != NULL){
-	getInput()->Update();
-	}
-	if( getInput2() != NULL){
-	getInput2()->Update();
-	}
-	this->Execute();
-};
+//   ;
+
+// };
+
+// void  TBCombine::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+  
+// };
 
 void TBCombine::Execute()
 {
 
       int i, j;
-      int outputH= imageA->getHeight()+imageB->getHeight();
-      int outputW= imageA->getWidth();
+      int outputH= inputA->getHeight()+inputB->getHeight();
+      int outputW= inputA->getWidth();
       int inputIndex, outputIndex;
 
-      image.ResetSize(outputW, outputH);
+      output.ResetSize(outputW, outputH);
 
-      Pixel *inputABuffer = imageA->getBuffer();
-      Pixel *inputBBuffer = imageB->getBuffer();
-      Pixel *outputBuffer = image.getBuffer();
+      Pixel *inputABuffer = inputA->getBuffer();
+      Pixel *inputBBuffer = inputB->getBuffer();
+      Pixel *outputBuffer = output.getBuffer();
 
 
-      for ( i = 0; i < imageA->getHeight(); i++){
+      for ( i = 0; i < inputA->getHeight(); i++){
         for ( j = 0; j < outputW; j++){
 
-              inputIndex = i * imageA->getWidth()+ j;
+              inputIndex = i * inputA->getWidth()+ j;
               outputIndex = i * outputW + j;
 
               outputBuffer[outputIndex] = inputABuffer[inputIndex];
@@ -154,10 +209,10 @@ void TBCombine::Execute()
       }
 
 
-      for ( i = imageA->getHeight(); i < outputH; i++){
+      for ( i = inputA->getHeight(); i < outputH; i++){
         for ( j = 0; j < outputW; j++){
 
-            inputIndex = (i-imageA->getHeight()) * imageA->getWidth() + j;
+            inputIndex = (i-inputA->getHeight()) * inputA->getWidth() + j;
             outputIndex = i * outputW + j;
 
             outputBuffer[outputIndex] = inputBBuffer[inputIndex];
@@ -167,25 +222,35 @@ void TBCombine::Execute()
 
 }
 
+// Blender::Blender(){
 
+//   GetOutput()->setSource(this);
 
-Blender::Blender(){
-	GetOutput()->setSource(this);
-};
-Blender::~Blender(){
-	;
-};
+// };
 
-void 	Blender::Update(){
-	if (getInput() != NULL){
-	getInput()->Update();
-	}
-	if( getInput2() != NULL){
-	getInput2()->Update();
-	}
-	this->Execute();
-};
+// Blender::~Blender(){
 
+//   ;
+
+// };
+
+// void  Blender::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+  
+// };
 
 void Blender::SetFactor(double f)
 {
@@ -202,14 +267,14 @@ void Blender::Execute()
 {
 
     int index;
-    int outputH= imageA->getHeight();
-    int outputW= imageA->getWidth();
+    int outputH= inputA->getHeight();
+    int outputW= inputA->getWidth();
 
-    image.ResetSize(outputW, outputH);
+    output.ResetSize(outputW, outputH);
 
-    Pixel *inputABuffer = imageA->getBuffer();
-    Pixel *inputBBuffer = imageB->getBuffer();
-    Pixel *outputBuffer = image.getBuffer();
+    Pixel *inputABuffer = inputA->getBuffer();
+    Pixel *inputBBuffer = inputB->getBuffer();
+    Pixel *outputBuffer = output.getBuffer();
 
     for (int i = 0; i < outputH; i++){
       for (int j = 0; j < outputW; j++) {

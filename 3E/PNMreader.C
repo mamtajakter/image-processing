@@ -11,7 +11,7 @@ PNMreader::PNMreader(string filename)
 
 PNMreader::~PNMreader()
 {
-  delete (this -> filename);
+   (this -> filename).clear();
 }
 
 
@@ -36,7 +36,7 @@ void PNMreader::Execute()
 
     unsigned char rr, gg, bb;
     int index;
-    Pixel *inputBuffer = this->image.getBuffer();
+    Pixel *inputBuffer = output.getBuffer();
 
  	  for (int i = 0; i < height; i++)
  		  for (int j = 0; j < width; j++) {
@@ -53,3 +53,9 @@ void PNMreader::Execute()
  	 fclose(f_in);
 
 }
+
+void PNMreader::Update(){
+    Execute();  
+
+};
+

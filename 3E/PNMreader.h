@@ -12,7 +12,8 @@ class PNMreader : public Source
 
 public:
     PNMreader(string filename);
-    void Execute();
+	virtual void	Update();
+	virtual void	Execute(void);
 
     virtual ~PNMreader();
 

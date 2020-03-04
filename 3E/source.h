@@ -11,15 +11,16 @@ class Source
 
 
 public:
-
-
+	Source();
+	virtual ~Source();
     Image* GetOutput();
-    virtual void Update() = 0;
+	virtual void Update() ;
 
 
 protected:
-    Image image;
+    Image output;
     virtual void Execute() = 0;
+    
 
 };
 

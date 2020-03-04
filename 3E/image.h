@@ -14,8 +14,7 @@ class Image
 private:
     Pixel* buffer;
     int w, h, mv;
-
-    Source* s;
+    Source *s;
 public:
     Image();
     Image(Pixel *buf, int w, int h, int mv);
@@ -35,9 +34,10 @@ public:
 
     void ResetSize(int w, int h);
 
-    void 	Update();
-    Source*	getSource();
-    void	setSource(Source*);
+    Source* getSource();
+    void    setSource(Source*);
+    
+    void    Update();
 };
 
 #endif

@@ -10,13 +10,16 @@ class Sink
 
 
 public:
-
+    Sink();
+    virtual ~Sink();
     void SetInput(Image *img);
     void SetInput2(Image *img);
+    Image* GetInput();
+    Image* GetInput2();
 
 
 protected:
-    Image *imageA, *imageB;
+    Image *inputA, *inputB;
 
 };
 
