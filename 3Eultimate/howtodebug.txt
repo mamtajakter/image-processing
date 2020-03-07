@@ -1,0 +1,11 @@
+0. create a new project
+0. remove main.cpp
+0. create each new c++ file and paste code into that. remember, all c++ source files must be saved with .cpp extension
+1. create a makefile
+2. right click on makefile and click "Run Makeile" and then an executable named "3Eultimate" will be created
+3. then select the executable name "3Eultimate" from the top-right textbox and dropdown menu
+4. click on "Run" from menu and then select "Run 3Eultimate"
+5. then click "Run" from menu and select "Edit configurations"
+6. In the "Program arguments" text box, enter the command line arguments separated by space "3B_input.pnm 3B_output.pnm"
+7. In the "Working directory" text box, enter the entire path of the current project "/Users/mamtajakter/CLionProjects/3Eultimate/"
+8. click on "Run" from menu and then select "Run 3Eultimate" again
