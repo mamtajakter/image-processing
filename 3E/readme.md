@@ -1,3 +1,5 @@
+This is an older version of 3E, look for 3Eultimate for the updated one
+
 # To run:
 #### g++ main3E.C image.C sink.C source.C PNMreader.C PNMwriter.C filter.C
 #### ./a.out 3B_input.pnm 3B_output.pnm
