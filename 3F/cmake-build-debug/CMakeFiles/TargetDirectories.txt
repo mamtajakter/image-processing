@@ -1,0 +1,3 @@
+/Users/mamtajakter/CLionProjects/3Eultimate/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/mamtajakter/CLionProjects/3Eultimate/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/mamtajakter/CLionProjects/3Eultimate/cmake-build-debug/CMakeFiles/source.h.dir
