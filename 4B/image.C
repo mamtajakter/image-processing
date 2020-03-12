@@ -98,6 +98,7 @@ void Image::ResetSize(int ww, int hh)
 
    //cleanup existing buffer if there is any
     // BufferClean();
+  buffer =0;
     w = ww;
     h = hh;
     mv = 255;
@@ -110,7 +111,7 @@ Source*  Image::getSource(){
 };
 
 void  Image::setSource(Source* source){
-    BufferClean();
+    buffer = 0;
     s = source;
 };
 

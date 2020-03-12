@@ -26,9 +26,9 @@ void Filter::Update()
 
     //leak-free
     if (inputA)
-        inputA->BufferClean();
+        inputA->SourceClean();
     if (inputB)
-        inputB->BufferClean();
+        inputB->SourceClean();
 
 }
 
