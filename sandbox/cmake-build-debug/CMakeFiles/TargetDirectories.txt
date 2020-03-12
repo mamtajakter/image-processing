@@ -1,0 +1,3 @@
+/Users/mamtajakter/CLionProjects/proj3G/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/mamtajakter/CLionProjects/proj3G/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/mamtajakter/CLionProjects/proj3G/cmake-build-debug/CMakeFiles/logging.h.dir
