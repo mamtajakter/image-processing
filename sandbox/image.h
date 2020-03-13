@@ -21,7 +21,7 @@ private:
     Source *s;
 public:
     Image();
-    Image(Pixel *buf, int w, int h, int mv);
+    // Image(Pixel *buf, int w, int h, int mv);
     Image (Image &);
 
     virtual ~Image();

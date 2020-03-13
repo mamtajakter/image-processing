@@ -7,6 +7,7 @@
 
 #include "filter.h"
 #include "logging.h"
+// #include "image.h"
 
 Filter::Filter()
 {
@@ -48,7 +49,7 @@ void Filter::Update()
         sprintf(msg, "%s: done updating input1", SourceName());
         Logger::LogEvent(msg);
     }
-
+//        inputA->Update();
 
     if (inputB != NULL){
         char msg[128];
@@ -58,7 +59,7 @@ void Filter::Update()
         sprintf(msg, "%s: done updating input2", SourceName());
         Logger::LogEvent(msg);
     }
-
+//        inputB->Update();
     char msg[128];
     sprintf(msg, "%s: about to execute", SourceName());
     Logger::LogEvent(msg);
@@ -69,6 +70,29 @@ void Filter::Update()
 }
 
 
+// Shrinker::Shrinker(){
+
+//       GetOutput()->setSource(this);
+// };
+
+// Shrinker::~Shrinker()
+// {
+//    ;
+// }
+
+
+// void  Shrinker::Update(){
+
+//   if (GetInput() != NULL){
+
+//       GetInput()->Update();
+
+//       }
+
+//  this->Execute();
+
+
+// };
 
 const char *Shrinker::FilterName()
 {
@@ -106,6 +130,35 @@ void Shrinker::Execute()
 }
 
 
+// LRCombine::LRCombine(){
+
+//   GetOutput()->setSource(this);
+
+// };
+
+// LRCombine::~LRCombine(){
+
+//   ;
+
+// };
+
+// void  LRCombine::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+
+// };
 const char *LRCombine::FilterName()
 {
     return "LRCombine";
@@ -134,7 +187,13 @@ void LRCombine::Execute()
         DataFlowException e(SinkName(), msg);
         throw e;
     }
-
+//    if(inputA->getWidth() != inputB->getWidth())
+//    {
+//        char msg[1024];
+//        sprintf(msg, "%s: widths must match: %d, %d", SinkName(), inputA->getWidth(),inputB->getWidth());
+//        DataFlowException e(SinkName(), msg);
+//        throw e;
+//    }
 
     int i, j;
 
@@ -172,7 +231,35 @@ void LRCombine::Execute()
 
 }
 
+// TBCombine::TBCombine(){
 
+//   GetOutput()->setSource(this);
+
+// };
+
+// TBCombine::~TBCombine(){
+
+//   ;
+
+// };
+
+// void  TBCombine::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+
+// };
 
 const char *TBCombine::FilterName()
 {
@@ -195,7 +282,13 @@ void TBCombine::Execute()
         DataFlowException e(SinkName(), msg);
         throw e;
     }
-
+//    if(inputA->getHeight() != inputB->getHeight())
+//    {
+//        char msg[1024];
+//        sprintf(msg, "%s: heights must match: %d, %d", SinkName(), inputA->getHeight(),inputB->getHeight());
+//        DataFlowException e(SinkName(), msg);
+//        throw e;
+//    }
     if(inputA->getWidth() != inputB->getWidth())
     {
         char msg[1024];
@@ -241,7 +334,35 @@ void TBCombine::Execute()
 
 }
 
+// Blender::Blender(){
 
+//   GetOutput()->setSource(this);
+
+// };
+
+// Blender::~Blender(){
+
+//   ;
+
+// };
+
+// void  Blender::Update(){
+
+//   if (GetInput() != NULL){
+
+//   GetInput()->Update();
+
+//   }
+
+//   if (GetInput2() != NULL){
+
+//   GetInput2()->Update();
+
+//   }
+
+//   this->Execute();
+
+// };
 
 void Blender::SetFactor(double f)
 {
@@ -342,23 +463,14 @@ void Mirror :: Execute()
 
     int i, j;
 
-    int index;
-    int outputH= inputA->getHeight();
-    int outputW= inputA->getWidth();
-    int inputIndex, outputIndex;
-    Pixel *inputBuffer = inputA->getBuffer();
-    Pixel *outputBuffer = output.getBuffer();
-    output.ResetSize(outputW, outputH);
+    output.ResetSize(inputA->getWidth(), inputA->getHeight());
 
 
-    for(i = 0; i < outputH; i++)
+    for(i = 0; i < output.getHeight(); i++)
     {
-        for(j = 0; j < outputW; j++)
+        for(j = 0; j < output.getWidth(); j++)
         {
-            inputIndex = i * outputW + (outputW - 1 - j);
-            outputIndex = i * outputW + j;
-
-            outputBuffer[outputIndex] = inputBuffer[inputIndex];
+            output.getBuffer()[i * output.getWidth() + j] = inputA->getBuffer()[i * output.getWidth() + (output.getWidth() - 1 - j)];
         }
     }
 }
@@ -380,25 +492,17 @@ void Rotate :: Execute()
     }
 
     int i, j;
-    int index;
-    int outputW= inputA->getHeight();
-    int outputH= inputA->getWidth();
-    int inputIndex, outputIndex;
-    Pixel *inputBuffer = inputA->getBuffer();
-    Pixel *outputBuffer = output.getBuffer();
-    output.ResetSize(outputW, outputH);
+
+    output.ResetSize(inputA->getHeight(), inputA->getWidth());
 
 
-    for(i = 0; i < outputH; i++)
-        for(j= 0; j < outputW; j++)
+    for(i = 0; i < output.getHeight(); i++)
+    {
+        for(j= 0; j < output.getWidth(); j++)
         {
-            inputIndex = (outputW - 1 - j) * outputH + i;
-            outputIndex = i * outputW + j;
-
-            outputBuffer[outputIndex] = inputBuffer[inputIndex];
+            output.getBuffer()[i * output.getWidth() + j] = inputA->getBuffer()[(output.getWidth() - 1 - j) * output.getHeight() + i];
         }
-    
-
+    }
 }
 
 
@@ -409,9 +513,6 @@ const char *Subtract::FilterName()
 
 void Subtract :: Execute()
 {
-
-   
-
     if(inputA == NULL)
     {
         char msg[1024];
@@ -442,32 +543,14 @@ void Subtract :: Execute()
     }
     int i;
 
-     int index;
-    int outputH= inputA->getHeight();
-    int outputW= inputA->getWidth();
-    int inputIndex, outputIndex;
-    Pixel *inputABuffer = inputA->getBuffer();
-    Pixel *inputBBuffer = inputB->getBuffer();
-    Pixel *outputBuffer = output.getBuffer();
-    output.ResetSize(outputW, outputH);
+    output.ResetSize(inputA->getWidth(), inputA->getHeight());
 
-    for(i = 0; i < outputH * outputW; i++)
+
+    for(i = 0; i < output.getHeight() * output.getWidth(); i++)
     {
-        if (inputABuffer[i].r < inputBBuffer[i].r) 
-            outputBuffer[i].r = 0;
-        else 
-            outputBuffer[i].r =inputABuffer[i].r - inputBBuffer[i].r;
-
-        if (inputABuffer[i].g < inputBBuffer[i].g) 
-            outputBuffer[i].g = 0;
-        else 
-            outputBuffer[i].g =inputABuffer[i].g - inputBBuffer[i].g;
-
-        if (inputABuffer[i].b < inputBBuffer[i].b) 
-            outputBuffer[i].b = 0;
-        else 
-            outputBuffer[i].b =inputABuffer[i].b - inputBBuffer[i].b;
-
+        output.getBuffer()[i].r = (inputA->getBuffer()[i].r < inputB->getBuffer()[i].r) ? 0 : inputA->getBuffer()[i].r - inputB->getBuffer()[i].r;
+        output.getBuffer()[i].g = (inputA->getBuffer()[i].g < inputB->getBuffer()[i].g) ? 0 : inputA->getBuffer()[i].g - inputB->getBuffer()[i].g;
+        output.getBuffer()[i].b = (inputA->getBuffer()[i].b < inputB->getBuffer()[i].b) ? 0 : inputA->getBuffer()[i].b - inputB->getBuffer()[i].b;
     }
 }
 
@@ -489,21 +572,15 @@ void Grayscale :: Execute()
 
     int i;
 
-    int index;
-    int outputH= inputA->getHeight();
-    int outputW= inputA->getWidth();
-    int inputIndex, outputIndex;
-    Pixel *inputBuffer = inputA->getBuffer();
-    Pixel *outputBuffer = output.getBuffer();
-    output.ResetSize(outputW, outputH);
+    output.ResetSize(inputA->getWidth(), inputA->getHeight());
 
 
-    for(i = 0; i < outputH * outputW; i++)
+    for(i = 0; i < output.getHeight() * output.getWidth(); i++)
     {
-        int grayval = inputBuffer[i].r/5 + inputBuffer[i].g/2 + inputBuffer[i].b/4;
-        outputBuffer[i].r = (unsigned char) grayval;
-        outputBuffer[i].g = (unsigned char) grayval;
-        outputBuffer[i].b = (unsigned char) grayval;
+        int val = inputA->getBuffer()[i].r/5 + inputA->getBuffer()[i].g/2 + inputA->getBuffer()[i].b/4;
+        output.getBuffer()[i].r = (unsigned char) val;
+        output.getBuffer()[i].g = (unsigned char) val;
+        output.getBuffer()[i].b = (unsigned char) val;
     }
 }
 
@@ -525,56 +602,45 @@ void Blur :: Execute()
 
     int i, j;
 
+    output.ResetSize(inputA->getWidth(), inputA->getHeight());
 
-    int index;
-    int outputH= inputA->getHeight();
-    int outputW= inputA->getWidth();
-    int inputIndex, outputIndex;
-    Pixel *inputBuffer = inputA->getBuffer();
-    Pixel *outputBuffer = output.getBuffer();
-    output.ResetSize(outputW, outputH);
 
-   unsigned char r1, r2, r3, g1,g2, g3, b1,b2,b3;
-
-    for(i = 0; i < outputH; i++)
+    for(i = 0; i < output.getHeight(); i++)
     {
-        for(j = 0; j < outputW; j++)
+        for(j = 0; j < output.getWidth(); j++)
         {
-            index = i * outputW + j;
-            if(i == 0 || i ==(outputH-1) || j == 0 || j == (outputW-1))
-
+            if(i == 0 || i ==(output.getHeight()-1) || j == 0 || j == (output.getWidth()-1))
             {
-
-                outputBuffer[index] = inputBuffer[index];
+                output.getBuffer()[i * output.getWidth() + j] = inputA->getBuffer()[i * output.getWidth() + j];
             }
             else
             {
-                outputBuffer[index].r =  inputBuffer[(i-1)*outputW+j-1].r/8 +
-                                            inputBuffer[(i-1)*outputW+j].r/8 +
-                                            inputBuffer[(i-1)*outputW+j+1].r/8 +
-                                            inputBuffer[i*outputW+j-1].r/8 +
-                                            inputBuffer[i*outputW+j+1].r/8 +
-                                            inputBuffer[(i+1)*outputW+j-1].r/8 +
-                                            inputBuffer[(i+1)*outputW+j].r/8 +
-                                            inputBuffer[(i+1)*outputW+j+1].r/8;
+                output.getBuffer()[i*output.getWidth()+j].r =  inputA->getBuffer()[(i-1)*output.getWidth()+j-1].r/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j].r/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j+1].r/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j-1].r/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j+1].r/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j-1].r/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j].r/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j+1].r/8;
 
-                outputBuffer[index].g =  inputBuffer[(i-1)*outputW+j-1].g/8 +
-                                            inputBuffer[(i-1)*outputW+j].g/8 +
-                                            inputBuffer[(i-1)*outputW+j+1].g/8 +
-                                            inputBuffer[i*outputW+j-1].g/8 +
-                                            inputBuffer[i*outputW+j+1].g/8 +
-                                            inputBuffer[(i+1)*outputW+j-1].g/8 +
-                                            inputBuffer[(i+1)*outputW+j].g/8 +
-                                            inputBuffer[(i+1)*outputW+j+1].g/8;
+                output.getBuffer()[i*output.getWidth()+j].g =  inputA->getBuffer()[(i-1)*output.getWidth()+j-1].g/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j].g/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j+1].g/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j-1].g/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j+1].g/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j-1].g/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j].g/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j+1].g/8;
 
-                outputBuffer[index].b =  inputBuffer[(i-1)*outputW+j-1].b/8 +
-                                            inputBuffer[(i-1)*outputW+j].b/8 +
-                                            inputBuffer[(i-1)*outputW+j+1].b/8 +
-                                            inputBuffer[i*outputW+j-1].b/8 +
-                                            inputBuffer[i*outputW+j+1].b/8 +
-                                            inputBuffer[(i+1)*outputW+j-1].b/8 +
-                                            inputBuffer[(i+1)*outputW+j].b/8 +
-                                            inputBuffer[(i+1)*outputW+j+1].b/8;
+                output.getBuffer()[i*output.getWidth()+j].b =  inputA->getBuffer()[(i-1)*output.getWidth()+j-1].b/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j].b/8 +
+                                                               inputA->getBuffer()[(i-1)*output.getWidth()+j+1].b/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j-1].b/8 +
+                                                               inputA->getBuffer()[i*output.getWidth()+j+1].b/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j-1].b/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j].b/8 +
+                                                               inputA->getBuffer()[(i+1)*output.getWidth()+j+1].b/8;
             }
         }
     }
@@ -599,17 +665,24 @@ void Color :: Execute()
     int i;
 
     output.ResetSize(width, height);
-    Pixel *outputBuffer = output.getBuffer();
 
     for(i = 0; i < height * width; i++)
     {
-        outputBuffer[i].r = red;
-        outputBuffer[i].g = green;
-        outputBuffer[i].b = blue;
+        output.getBuffer()[i].r = red;
+        output.getBuffer()[i].g = green;
+        output.getBuffer()[i].b = blue;
     }
 }
 
-
+//void Color::Update(){
+//    char msg[128];
+//
+//    sprintf(msg, "%s: about to execute", SourceName());
+//    Logger::LogEvent(msg);
+//    Execute();
+//    sprintf(msg, "%s: done executing", SourceName());
+//    Logger::LogEvent(msg);
+//}
 
 void CheckSum :: OutputCheckSum(const char *filename)
 {
@@ -621,17 +694,11 @@ void CheckSum :: OutputCheckSum(const char *filename)
     unsigned char green = 0;
     unsigned char blue = 0;
 
-    
-    int outputH= inputA->getHeight();
-    int outputW= inputA->getWidth();
-    Pixel *inputBuffer = inputA->getBuffer();
-
-
-    for(i = 0; i < outputH * outputW; i++)
+    for(i = 0; i < inputA->getHeight() * inputA->getWidth(); i++)
     {
-        red = red + inputBuffer[i].r;
-        green = green + inputBuffer[i].g;
-        blue = blue + inputBuffer[i].b;
+        red += inputA->getBuffer()[i].r;
+        green += inputA->getBuffer()[i].g;
+        blue += inputA->getBuffer()[i].b;
     }
 
     fprintf(f_in, "CHECKSUM: %d, %d, %d\n", red, green, blue);

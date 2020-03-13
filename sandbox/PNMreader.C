@@ -13,7 +13,7 @@ PNMreader::PNMreader(char* path)
 
 PNMreader::~PNMreader()
 {
-
+//    filename.clear();
 	delete filename;
 }
 
@@ -45,7 +45,16 @@ void PNMreader::Execute()
         throw e;
     }
 
-
+//
+    // if (f_in == NULL){
+    //   fprintf(stderr, "Cannot find the file path %s\n",(this -> filename).c_str() );
+    //   return;
+    // }
+    //
+    // if(strcmp(magicNum, "P6")!=0){
+    //   fprintf(stderr, " %s File is not in P6 format\n",(this -> filename).c_str() );
+    //   return;
+    // }
 
     unsigned char rr, gg, bb;
     int index;

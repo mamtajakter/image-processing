@@ -9,26 +9,26 @@
 
 
 Image::Image(){
+    ResetSize(w,h);
     // w=1786;
     // h=1344;
     // mv=255;
-d
+
     // buffer = (Pixel *) malloc(sizeof(Pixel)*w*h);
-    ResetSize(w, h)
 
 }
 
 
 
-Image::Image(Pixel *buf, int ww, int hh, int mvv){
-    w=ww;
-    h=hh;
-    mv=mvv;
+// Image::Image(Pixel *buf, int ww, int hh, int mvv){
+//     w=ww;
+//     h=hh;
+//     mv=mvv;
 
-    buffer = buf;
+//     buffer = buf;
 
 
-}
+// }
 
 Image::Image(Image &img){
 
